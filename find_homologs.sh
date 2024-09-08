@@ -13,16 +13,20 @@ output_file="$3"
 temp_file="${output_file}_temp"
 
 # Run BLAST
-blastp -query $query_file -subject $subject_file -task blastp-short -outfmt "6 std qlen" -out $output_file
+tblastn -query $query_file -subject $subject_file -task blastp-short -outfmt "6 qseqid sseqid pident length qlen" -out temp_results.txt
 
 # Notify the user
 # echo "BLAST completed. Results saved in $output_file"
 
 # Filter the BLAST results
-awk -F'\t' '$3 > 30.000 && $4 == 0.9*$13 {print}' $output_file > $temp_file
+awk '$3 > 30.000 && $4 / $5 > 0.9' temp_results.txt > $output_file
 
-# Move the result back to output file
-mv $temp_file $output_file
+# Count the number of matches
+num_matches=$(wc -l < $output_file)
 
 # Notify the user
 echo "Filtered results saved in $output_file"
+echo "Number of matches identified: $num_matches"
+
+# Cleanup
+rm temp_results.txt
