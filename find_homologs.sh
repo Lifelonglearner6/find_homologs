@@ -13,7 +13,7 @@ output_file="$3"
 temp_file="${output_file}_temp"
 
 # Run BLAST
-tblastn -query $query_file -subject $subject_file -task blastp-short -outfmt "6 qseqid sseqid pident length qlen" -out temp_results.txt
+tblastn -query $query_file -subject $subject_file -outfmt "6 qseqid sseqid pident length qlen" -out temp_results.txt
 
 # Notify the user
 # echo "BLAST completed. Results saved in $output_file"
